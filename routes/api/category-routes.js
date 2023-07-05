@@ -5,11 +5,15 @@ const { Category, Product } = require('../../models');
 
 router.get('/', (req, res) => {
   // find all categories
+  console.log('request/api/category', { req })
   // be sure to include its associated Products
   Category.findAll({
-    include: [Product],
-  }) .then(allCategories => res.json(allCategories))
-  .catch(err => res.status(400).jason(err))
+    //  include: [Product],
+  }).then(allCategories => {
+    console.log(allCategories)
+    res.json(allCategories)
+  })
+    .catch(err => res.status(400).json(err))
 });
 
 router.get('/:id', (req, res) => {
@@ -20,15 +24,15 @@ router.get('/:id', (req, res) => {
       id: req.params.id
     },
     include: [Product],
-  }) .then(singleCategory => res.json(singleCategory))
-  .catch(err => res.status(400).json(err))
+  }).then(singleCategory => res.json(singleCategory))
+    .catch(err => res.status(400).json(err))
 });
 
 router.post('/', (req, res) => {
   // create a new category
   Category.create(req.body)
-  .then(createdCategory => res.json(createdCategory))
-  .catch(err => res.status(400).json(err))
+    .then(createdCategory => res.json(createdCategory))
+    .catch(err => res.status(400).json(err))
 });
 
 router.put('/:id', (req, res) => {
@@ -37,18 +41,22 @@ router.put('/:id', (req, res) => {
     where: {
       id: req.params.id
     }
-  }) .then(updatedCategory => res.json(updatedCategory))
-  .catch(err => res.status(400).json(err))
+  }).then(updatedCategory => res.json(updatedCategory))
+    .catch(err => res.status(400).json(err))
 });
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
-  Category.destroy(req.body, {
+  Category.destroy({
     where: {
       id: req.params.id
     }
-  }) .then(deletedCategory => res.json(deletedCategory))
-  .catch(err => res.status(400).json(err))
+  }).then(deletedCategory => {
+    console.log(deletedCategory)
+    res.json(deletedCategory)
+
+  })
+    .catch(err => res.status(400).json(err))
 });
 
 module.exports = router;
